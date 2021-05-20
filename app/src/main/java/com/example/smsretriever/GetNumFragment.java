@@ -1,11 +1,15 @@
 package com.example.smsretriever;
 
 
+import android.Manifest;
 import android.content.ContentResolver;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.PermissionChecker;
 import androidx.fragment.app.Fragment;
 
 import android.text.format.DateFormat;
@@ -15,7 +19,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-
+import android.widget.Toast;
 
 
 public class GetNumFragment extends Fragment {
@@ -35,13 +39,21 @@ public class GetNumFragment extends Fragment {
         btnRetrieveNum.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                int permissionCheck = PermissionChecker.checkSelfPermission(getActivity(), Manifest.permission.READ_SMS);
+
+                if(permissionCheck != PermissionChecker.PERMISSION_GRANTED){
+                    ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.READ_SMS}, 0);
+                    return;
+                }
+
                 Uri uri = Uri.parse("content://sms");
                 String[] reqcols = new String[]{"date", "address", "body", "type"};
 
                 ContentResolver cr = getActivity().getContentResolver();
                 // filter
                 String filter = "address LIKE ?";
-                String[] filterArgs ={etNum.getText().toString()};
+                String[] filterArgs = {"%" + etNum.getText().toString() + "%"};
 
                 Cursor cursor = cr.query(uri, reqcols, filter, filterArgs, null);
                 String smsbody = "";
@@ -62,10 +74,20 @@ public class GetNumFragment extends Fragment {
                     }while (cursor.moveToNext());
                 }
                 tvNum.setText(smsbody);
-
-
             }
         });
         return  view;
+    }
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults){
+        switch(requestCode){
+            case 0: {
+                if (grantResults.length >0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                    btnRetrieveNum.performClick();
+                }
+                else{
+                    Toast.makeText(getActivity(), "Permission not granted", Toast.LENGTH_SHORT).show();
+                }
+            }
+        }
     }
 }
