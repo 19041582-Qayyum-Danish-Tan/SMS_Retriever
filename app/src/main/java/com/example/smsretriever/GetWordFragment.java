@@ -39,8 +39,7 @@ public class GetWordFragment extends Fragment {
             public void onClick(View view) {
 
                 int permissionCheck = PermissionChecker.checkSelfPermission(getActivity(), Manifest.permission.READ_SMS);
-
-                if(permissionCheck != PermissionChecker.PERMISSION_GRANTED){
+                if (permissionCheck != PermissionChecker.PERMISSION_GRANTED){
                     ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.READ_SMS}, 0);
                     return;
                 }
