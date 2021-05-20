@@ -57,8 +57,8 @@ public class GetNumFragment extends Fragment {
                 Cursor cursor = cr.query(uri, reqcols, filter, filterArgs, null);
                 String smsbody = "";
 
-                if(cursor.moveToFirst()){
-                    do{
+                if (cursor.moveToFirst()){
+                    do {
                         Long dateInMillis = cursor.getLong(0);
                         String date = (String) DateFormat.format("dd MM yyyy h:mm:ss aa", dateInMillis);
                         String address = cursor.getString(1);
@@ -66,11 +66,11 @@ public class GetNumFragment extends Fragment {
                         String type = cursor.getString(3);
                         if(type.equalsIgnoreCase("1")){
                             type = "Inbox";
-                        }else{
+                        } else {
                             type = "Sent";
                         }
                         smsbody += type + " " + address + "\n at " + date + "\n\"" + body + "\"\n\n";
-                    }while (cursor.moveToNext());
+                    } while (cursor.moveToNext());
                 }
                 tvNum.setText(smsbody);
             }
@@ -83,7 +83,7 @@ public class GetNumFragment extends Fragment {
                 if (grantResults.length >0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
                     btnRetrieveNum.performClick();
                 }
-                else{
+                else {
                     Toast.makeText(getActivity(), "Permission not granted", Toast.LENGTH_SHORT).show();
                 }
             }

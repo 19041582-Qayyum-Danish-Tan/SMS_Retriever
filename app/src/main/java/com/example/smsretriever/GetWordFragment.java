@@ -49,31 +49,31 @@ public class GetWordFragment extends Fragment {
 
                 ContentResolver cr = getActivity().getContentResolver();
 
-                String filter="body LIKE ?";
-                for(int i =0; i < tvWord.getText().toString().length(); i++){
-                    String[] sepfilter = tvWord.getText().toString().split(" ");
+                String filter = "body LIKE ?";
+
+                String[] tempArgs = tvWord.getText().toString().split(" ");
+                String[] filterArgs = new String[tempArgs.length];
+                for (int i = 0; i < tempArgs.length; i++) {
+                    filter += " AND ?";
+                    filterArgs[i] = "'%' + tempArgs[i] + '%'";
                 }
-                String[] filterArgs = {"%"+tvWord.getText().toString()+"%"};
-                
 
                 Cursor cursor = cr.query(uri, reqCols, filter ,filterArgs, null);
                 String smsBody = "";
-                if(cursor.moveToFirst()){
-                    do{
+                if (cursor.moveToFirst()){
+                    do {
                         long dateInMillis = cursor.getLong(0);
                         String date = (String) DateFormat.format("dd MMM yyyy h:mm:ss aa", dateInMillis);
                         String address = cursor.getString(1);
                         String body = cursor.getString(2);
                         String type = cursor.getString(3);
-                        if(type.equalsIgnoreCase("1")) {
+                        if (type.equalsIgnoreCase("1")) {
                             type = "Inbox";
-                        }
-                        else{
+                        } else {
                             type = "Sent";
                         }
                         smsBody += type + " " + address + "\n at "+ date + "\n\"" + body + "\"\n\n";
-                    }
-                    while (cursor.moveToNext());
+                    } while (cursor.moveToNext());
                 }
                 tvWord.setText(smsBody);
             }
@@ -85,8 +85,7 @@ public class GetWordFragment extends Fragment {
             case 0: {
                 if (grantResults.length >0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
                     btnRetrieveWord.performClick();
-                }
-                else{
+                } else {
                     Toast.makeText(getActivity(), "Permission not granted", Toast.LENGTH_SHORT).show();
                 }
             }
