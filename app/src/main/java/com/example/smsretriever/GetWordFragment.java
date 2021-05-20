@@ -1,7 +1,12 @@
 package com.example.smsretriever;
 
+import android.Manifest;
+import android.content.ContentResolver;
+import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.PermissionChecker;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -28,8 +33,17 @@ public class GetWordFragment extends Fragment {
         btnRetrieveWord.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Uri uri = Uri.parse("content://sms");
+                String[] reqCols = new String[]{"date", "address", "body", "type"};
+
                 String data = tvWord.getText().toString() + "\n" + "New Data";
                 tvWord.setText(data);
+
+                ContentResolver cr = getActivity().getContentResolver();
+                // The filter String
+                String filter="body LIKE ? AND body LIKE ?";
+                // The matches for the ?
+                String[] filterArgs = {data};
             }
         });
         return view;
