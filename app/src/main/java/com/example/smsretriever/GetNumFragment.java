@@ -70,7 +70,7 @@ public class GetNumFragment extends Fragment {
                         }else{
                             type = "Sent";
                         }
-                        smsbody += type + " " + address + "\n at" + date + "\n\"" + body + "\"\n\n";
+                        smsbody += type + " " + address + "\n at " + date + "\n\"" + body + "\"\n\n";
                     }while (cursor.moveToNext());
                 }
                 tvNum.setText(smsbody);
