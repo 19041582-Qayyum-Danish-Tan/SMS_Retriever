@@ -50,13 +50,11 @@ public class GetWordFragment extends Fragment {
                 ContentResolver cr = getActivity().getContentResolver();
 
                 String filter = "body LIKE ?";
-
                 String[] tempArgs = tvWord.getText().toString().split(" ");
                 String[] filterArgs = new String[tempArgs.length];
-                filterArgs[0] = '%' + tempArgs[0] + '%';
                 for (int i = 1; i < tempArgs.length; i++) {
                     filter += " AND body LIKE ?";
-                    filterArgs[i] = '"' + '%' + tempArgs[i] + '%' + '"';
+                    filterArgs[i] = '%' + tempArgs[i] + '%';
                 }
 
                 Cursor cursor = cr.query(uri, reqCols, filter ,filterArgs, null);
