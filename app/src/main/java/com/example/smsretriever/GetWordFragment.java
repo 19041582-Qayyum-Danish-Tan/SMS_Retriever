@@ -2,7 +2,6 @@ package com.example.smsretriever;
 
 import android.Manifest;
 import android.content.ContentResolver;
-import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -10,7 +9,6 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.PermissionChecker;
 import androidx.fragment.app.Fragment;
 
-import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,10 +34,10 @@ public class GetWordFragment extends Fragment {
             @Override
             public void onClick(View view) {
 
-                int permissionCheck = PermissionChecker.checkSelfPermission(GetWordFragment.this, Manifest.permission.READ_SMS);
+                int permissionCheck = PermissionChecker.checkSelfPermission(getActivity(), Manifest.permission.READ_SMS);
 
                 if(permissionCheck != PermissionChecker.PERMISSION_GRANTED){
-                    ActivityCompat.requestPermissions(GetWordFragment.this, new String[]{Manifest.permission.READ_SMS}, 0);
+                    ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.READ_SMS}, 0);
                     return;
                 }
 
@@ -86,7 +84,7 @@ public class GetWordFragment extends Fragment {
                     btnRetrieveWord.performClick();
                 }
                 else{
-                    Toast.makeText(MainActivity, "Permission not granted", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "Permission not granted", Toast.LENGTH_SHORT).show();
                 }
             }
         }
