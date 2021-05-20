@@ -55,7 +55,7 @@ public class GetWordFragment extends Fragment {
                 // The filter String
                 String filter="body LIKE ?";
                 // The matches for the ?
-                String[] filterArgs = {""};
+                String[] filterArgs = {"%" + etWord.getText().toString() + "%"};
 
                 Cursor cursor = cr.query(uri, reqCols, filter ,filterArgs, null);
                 String smsBody = "";
