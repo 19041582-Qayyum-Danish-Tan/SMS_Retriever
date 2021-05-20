@@ -2,6 +2,7 @@ package com.example.smsretriever;
 
 import android.Manifest;
 import android.content.ContentResolver;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -9,6 +10,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.PermissionChecker;
 import androidx.fragment.app.Fragment;
 
+import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,14 +38,36 @@ public class GetWordFragment extends Fragment {
                 Uri uri = Uri.parse("content://sms");
                 String[] reqCols = new String[]{"date", "address", "body", "type"};
 
-                String data = tvWord.getText().toString() + "\n" + "New Data";
-                tvWord.setText(data);
+                //String data = tvWord.getText().toString() + "\n" + "New Data";
+                //tvWord.setText(data);
 
                 ContentResolver cr = getActivity().getContentResolver();
                 // The filter String
                 String filter="body LIKE ? AND body LIKE ?";
                 // The matches for the ?
-                String[] filterArgs = {data};
+                String[] filterArgs = {tvWord.getText().toString()};
+
+                Cursor cursor = cr.query(uri, reqCols, filter, filterArgs, null);
+                String smsBody = "";
+                if (cursor.moveToFirst()) {
+                    do {
+                        long dateInMillis = cursor.getLong(0);
+                        String date = (String) DateFormat
+                                .format("dd MMM yyyy h:mm:ss aa", dateInMillis);
+                        String address = cursor.getString(1);
+                        String body = cursor.getString(2);
+                        String type = cursor.getString(3);
+                        if (type.equalsIgnoreCase("1")) {
+                            type = "Inbox:";
+                        } else {
+                            type = "Sent:";
+                        }
+                        smsBody += type + " " + address + "\n at " + date
+                                + "\n\"" + body + "\"\n\n";
+                    } while (cursor.moveToNext());
+                }
+                tvWord.setText(smsBody);
+
             }
         });
         return view;
