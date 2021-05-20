@@ -38,10 +38,10 @@ public class GetWordFragment extends Fragment {
             @Override
             public void onClick(View view) {
 
-                int permissionCheck = PermissionChecker.checkSelfPermission(GetWordFragment.this, Manifest.permission.READ_SMS);
+                int permissionCheck = PermissionChecker.checkSelfPermission(getActivity(), Manifest.permission.READ_SMS);
 
                 if(permissionCheck != PermissionChecker.PERMISSION_GRANTED){
-                    ActivityCompat.requestPermissions(GetWordFragment.this, new String[]{Manifest.permission.READ_SMS}, 0);
+                    ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.READ_SMS}, 0);
                     return;
                 }
 
@@ -53,9 +53,9 @@ public class GetWordFragment extends Fragment {
 
                 ContentResolver cr = getActivity().getContentResolver();
                 // The filter String
-                String filter="body LIKE ? AND body LIKE ?";
+                String filter="body LIKE ?";
                 // The matches for the ?
-                String[] filterArgs = {"%late%", "%min%"};
+                String[] filterArgs = {""};
 
                 Cursor cursor = cr.query(uri, reqCols, filter ,filterArgs, null);
                 String smsBody = "";
@@ -88,7 +88,7 @@ public class GetWordFragment extends Fragment {
                     btnRetrieveWord.performClick();
                 }
                 else{
-                    Toast.makeText(MainActivity, "Permission not granted", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "Permission not granted", Toast.LENGTH_SHORT).show();
                 }
             }
         }
