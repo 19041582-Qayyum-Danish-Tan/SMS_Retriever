@@ -48,14 +48,11 @@ public class GetWordFragment extends Fragment {
                 Uri uri = Uri.parse("content://sms");
                 String[] reqCols = new String[]{"date", "address", "body", "type"};
 
-                String data = tvWord.getText().toString() + "\n" + "New Data";
-                tvWord.setText(data);
-
                 ContentResolver cr = getActivity().getContentResolver();
-                // The filter String
+
                 String filter="body LIKE ?";
-                // The matches for the ?
-                String[] filterArgs = {"%" + etWord.getText().toString() + "%"};
+               
+                String[] filterArgs = {"%"+tvWord.getText().toString()+"%"};
 
                 Cursor cursor = cr.query(uri, reqCols, filter ,filterArgs, null);
                 String smsBody = "";
