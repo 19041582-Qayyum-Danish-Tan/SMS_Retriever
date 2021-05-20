@@ -1,15 +1,22 @@
 package com.example.smsretriever;
 
+
+import android.content.ContentResolver;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+
+
 
 public class GetNumFragment extends Fragment {
 
@@ -28,10 +35,37 @@ public class GetNumFragment extends Fragment {
         btnRetrieveNum.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String data = tvNum.getText().toString() + "\n" + "New Data";
-                tvNum.setText(data);
+                Uri uri = Uri.parse("content://sms");
+                String[] reqcols = new String[]{"date", "address", "body", "type"};
+
+                ContentResolver cr = getActivity().getContentResolver();
+                // filter
+                String filter = "address LIKE ?";
+                String[] filterArgs ={etNum.getText().toString()};
+
+                Cursor cursor = cr.query(uri, reqcols, filter, filterArgs, null);
+                String smsbody = "";
+
+                if(cursor.moveToFirst()){
+                    do{
+                        Long dateInMillis = cursor.getLong(0);
+                        String date = (String) DateFormat.format("dd MM yyyy h:mm:ss aa", dateInMillis);
+                        String address = cursor.getString(1);
+                        String body = cursor.getString(2);
+                        String type = cursor.getString(3);
+                        if(type.equalsIgnoreCase("1")){
+                            type = "Inbox";
+                        }else{
+                            type = "Sent";
+                        }
+                        smsbody += type + " " + address + "\n at" + date + "\n\"" + body + "\"\n\n";
+                    }while (cursor.moveToNext());
+                }
+                tvNum.setText(smsbody);
+
+
             }
         });
-        return view;
+        return  view;
     }
 }
