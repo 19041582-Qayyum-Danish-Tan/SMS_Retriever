@@ -54,7 +54,7 @@ public class GetWordFragment extends Fragment {
                 String[] tempArgs = tvWord.getText().toString().split(" ");
                 String[] filterArgs = new String[tempArgs.length];
                 for (int i = 0; i < tempArgs.length; i++) {
-                    filter += " body AND ?";
+                    filter += " AND body LIKE ?";
                     filterArgs[i] = "'%' + tempArgs[i] + '%'";
                 }
 
