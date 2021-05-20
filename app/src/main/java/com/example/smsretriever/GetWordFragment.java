@@ -50,8 +50,11 @@ public class GetWordFragment extends Fragment {
                 ContentResolver cr = getActivity().getContentResolver();
 
                 String filter="body LIKE ?";
-               
+                for(int i =0; i < tvWord.getText().toString().length(); i++){
+                    String[] sepfilter = tvWord.getText().toString().split(" ");
+                }
                 String[] filterArgs = {"%"+tvWord.getText().toString()+"%"};
+                
 
                 Cursor cursor = cr.query(uri, reqCols, filter ,filterArgs, null);
                 String smsBody = "";
