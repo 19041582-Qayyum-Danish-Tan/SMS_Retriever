@@ -2,6 +2,7 @@ package com.example.smsretriever;
 
 import android.Manifest;
 import android.content.ContentResolver;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -9,6 +10,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.PermissionChecker;
 import androidx.fragment.app.Fragment;
 
+import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,7 +53,7 @@ public class GetWordFragment extends Fragment {
                 // The filter String
                 String filter="body LIKE ?";
                 // The matches for the ?
-                String[] filterArgs = {tvWord.getText().toString()};
+                String[] filterArgs = {"%"+tvWord.getText().toString()+"%"};
 
                 Cursor cursor = cr.query(uri, reqCols, filter ,filterArgs, null);
                 String smsBody = "";
